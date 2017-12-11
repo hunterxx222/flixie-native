@@ -17,10 +17,13 @@ export default class App extends React.Component {
     super(props);
     this.fetchWithPage = this.fetchWithPage.bind(this);
     this.loadMore = this.loadMore.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
     this.state = {
       movies: [],
       loading: false,
-      page: 1
+      page: 1,
+      searchText: "",
     }
   }
 
@@ -40,7 +43,8 @@ export default class App extends React.Component {
             const newResults = this.state.movies.concat(plusSet);
             this.setState({
               movies: newResults,
-              loading: false
+              loading: false,
+              filteredMovies: this.state.movies
             });
           })
       }
@@ -53,6 +57,24 @@ export default class App extends React.Component {
       page: newPage
     }, () => this.fetchWithPage(newPage));
   }
+  onRefresh() {
+    this.setState({
+      page: 1
+    }, () => this.fetchWithPage(this.state.page))
+  }
+
+  handleChange(searchText) {
+    this.setState({
+      searchText
+    });
+    var filteredMovies = this.state.movies;
+    filteredMovies = filteredMovies.filter(movie => {
+      return movie.title.toLowerCase().search(
+        searchText.toLowerCase()
+      )!== -1
+    })
+    this.setState({ filteredMovies });
+  }
 
   componentWillMount(props) {
     this.fetchWithPage(1)
@@ -63,9 +85,11 @@ export default class App extends React.Component {
 
     return (
         <Routes screenProps={{
-          movies: this.state.movies,
+          movies: this.state.filteredMovies,
           loadMore: this.loadMore,
-          loading: this.state.loading
+          loading: this.state.loading,
+          onRefresh: this.onRefresh,
+          handleChange: this.handleChange
         }}/>
       )
   }
