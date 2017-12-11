@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, LayoutAnimation } from 'react-native';
 import MovieList from './MovieList'
 import { StackNavigator } from 'react-navigation'
 import MovieProfile from './MovieProfile'
@@ -44,7 +44,7 @@ export default class App extends React.Component {
             this.setState({
               movies: newResults,
               loading: false,
-              filteredMovies: this.state.movies
+              filteredMovies: newResults
             });
           })
       }
@@ -74,6 +74,7 @@ export default class App extends React.Component {
       )!== -1
     })
     this.setState({ filteredMovies });
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
   }
 
   componentWillMount(props) {
@@ -85,7 +86,8 @@ export default class App extends React.Component {
 
     return (
         <Routes screenProps={{
-          movies: this.state.filteredMovies,
+          movies: this.state.movies,
+          filteredMovies: this.state.filteredMovies,
           loadMore: this.loadMore,
           loading: this.state.loading,
           onRefresh: this.onRefresh,

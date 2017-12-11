@@ -1,6 +1,8 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import Image from "react-native-image-progress";
+import ProgressBar from "react-native-progress/Bar";
 
 // create a component
 class MovieCard extends Component {
@@ -9,7 +11,7 @@ class MovieCard extends Component {
     return (
     <TouchableHighlight onPress={this.props.loadProfile}>
         <View>
-          <Image style={{ width: 300, height: 150 }} source={img} />
+          <Image style={{ width: 300, height: 150 }} source={img} indicator={ProgressBar}/>
           <Text>{this.props.title}</Text>
         </View>
       </TouchableHighlight>
